@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ru" data-lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RoR Cheat Panel — панель для Risk of Rain 2</title>
+    <meta name="description" content="RoR Cheat Panel 1.1 — чит-панель для Risk of Rain 2 (1.4.1): предметы, godmode, noclip, телепорт, артефакты, админка игроков. Скачать бесплатно, установка в один архив." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="RoR Cheat Panel — панель для Risk of Rain 2" />
+    <meta property="og:description" content="Предметы, godmode, noclip, телепорт, артефакты, админка игроков. Ctrl+F10 в игре." />
+    <meta property="og:image" content="/assets/logo.png" />
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
+    <style>
+      :root {
+        --bg: #07060d;
+        --bg-2: #0f0c1c;
+        --card: rgba(255, 255, 255, 0.04);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --text: #ece9f7;
+        --muted: #9a94b8;
+        --accent: #a855f7;
+        --accent-2: #ec4899;
+        --accent-glow: rgba(168, 85, 247, 0.45);
+        --key-bg: #1b1730;
+        --key-border: #3a3260;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background:
+          radial-gradient(900px 500px at 15% -10%, rgba(168, 85, 247, 0.22) 0%, transparent 60%),
+          radial-gradient(800px 500px at 90% 0%, rgba(236, 72, 153, 0.16) 0%, transparent 60%),
+          linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 40%);
+        color: var(--text);
+        line-height: 1.55;
+        min-height: 100%;
+      }
+      a { color: var(--accent); }
+      .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+      /* language switch */
+      [data-lang="ru"] [lang-en] { display: none !important; }
+      [data-lang="en"] [lang-ru] { display: none !important; }
+      .lang {
+        position: fixed; top: 14px; right: 14px; z-index: 10;
+        display: flex; gap: 4px; padding: 4px;
+        background: rgba(15, 12, 28, 0.85); border: 1px solid var(--card-border);
+        border-radius: 999px; backdrop-filter: blur(8px);
+      }
+      .lang button {
+        background: transparent; border: 0; color: var(--muted); cursor: pointer;
+        font: inherit; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+      }
+      .lang button.active { background: var(--accent); color: #fff; }
+      .back {
+        position: fixed; top: 14px; left: 14px; z-index: 10;
+        padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none;
+        color: var(--muted); background: rgba(15, 12, 28, 0.85); border: 1px solid var(--card-border); backdrop-filter: blur(8px);
+        transition: color 0.15s ease;
+      }
+      .back:hover { color: var(--text); }
+
+      /* hero */
+      header { padding: 80px 0 48px; text-align: center; }
+      .logo-link { display: block; width: fit-content; margin: 0 auto 18px; text-decoration: none; color: inherit; text-align: center; }
+      .logo {
+        width: min(420px, 80vw); height: auto; display: block; margin: 0 auto;
+        filter: drop-shadow(0 0 32px var(--accent-glow));
+        transition: transform 0.25s ease, filter 0.25s ease;
+      }
+      .logo-link:hover .logo { transform: scale(1.03); filter: drop-shadow(0 0 48px rgba(236, 72, 153, 0.6)); }
+      .logo-cap {
+        display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 4px;
+        font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--muted);
+        opacity: 0.7; transition: opacity 0.2s ease, color 0.2s ease;
+      }
+      .logo-cap svg { width: 16px; height: 16px; }
+      .logo-link:hover .logo-cap { opacity: 1; color: #ff4d4d; }
+
+      /* support block */
+      .support {
+        position: relative; overflow: hidden; border-radius: 20px; padding: 28px; margin: 56px 0 16px;
+        display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.16), rgba(236, 72, 153, 0.10) 60%, rgba(255, 77, 77, 0.10));
+        border: 1px solid rgba(168, 85, 247, 0.35);
+      }
+      .support::before {
+        content: ""; position: absolute; inset: -40% auto auto -10%; width: 320px; height: 320px; border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(236, 72, 153, 0.25), transparent); pointer-events: none;
+      }
+      .support-ic {
+        width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; flex: none;
+        background: #ff0000; color: #fff; box-shadow: 0 10px 30px rgba(255, 0, 0, 0.35);
+      }
+      .support-ic svg { width: 34px; height: 34px; }
+      .support h2 { font-size: clamp(20px, 3.2vw, 26px); margin-bottom: 6px; }
+      .support p { color: var(--muted); font-size: 15px; max-width: 560px; }
+      .support .btns { display: flex; flex-direction: column; gap: 10px; min-width: 200px; }
+      .btn-yt {
+        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+        padding: 13px 22px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 15px; color: #fff;
+        background: #ff0000; box-shadow: 0 10px 28px rgba(255, 0, 0, 0.3); transition: transform 0.15s ease, filter 0.15s ease;
+      }
+      .btn-yt:hover { transform: translateY(-2px); filter: brightness(1.08); }
+      .btn-yt svg { width: 20px; height: 20px; }
+      .btn-ghost {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+        padding: 11px 18px; border-radius: 12px; font: inherit; font-weight: 600; font-size: 14px; color: var(--text);
+        background: rgba(255, 255, 255, 0.06); border: 1px solid var(--card-border); transition: background 0.15s ease;
+      }
+      .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
+      .btn-ghost.done { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); }
+      @media (max-width: 760px) {
+        .support { grid-template-columns: 1fr; text-align: center; }
+        .support-ic { margin: 0 auto; }
+        .support p { margin: 0 auto; }
+        .support .btns { min-width: 0; }
+      }
+      .eyebrow {
+        display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+        text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+      }
+      h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
+      h1 span {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .lead { max-width: 640px; margin: 18px auto 0; color: var(--muted); font-size: clamp(16px, 2.4vw, 19px); }
+      .cta { margin-top: 34px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      .btn-dl {
+        display: inline-flex; align-items: center; gap: 12px;
+        padding: 16px 30px; border-radius: 14px; text-decoration: none; color: #fff;
+        font-weight: 700; font-size: 18px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        box-shadow: 0 12px 40px var(--accent-glow);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .btn-dl:hover { transform: translateY(-2px); box-shadow: 0 16px 48px var(--accent-glow); }
+      .btn-dl svg { width: 22px; height: 22px; }
+      .btn-dl small { font-weight: 500; opacity: 0.85; font-size: 13px; }
+      .meta { color: var(--muted); font-size: 13px; }
+      .meta code { color: var(--text); background: var(--key-bg); padding: 2px 6px; border-radius: 6px; font-size: 12px; }
+      .hash-help { color: var(--muted); font-size: 12px; margin-left: 6px; text-decoration: underline dotted; text-underline-offset: 3px; }
+      .hash-help:hover { color: var(--accent); }
+      .card.wide { grid-column: 1 / -1; }
+      .card pre {
+        margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;
+        background: var(--key-bg); border: 1px solid var(--card-border); color: var(--text);
+      }
+      .card .full-hash { font-size: 12px; overflow-wrap: anywhere; user-select: all; }
+      .card:target { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25); }
+      .hotkey-hint { margin-top: 22px; color: var(--muted); font-size: 15px; }
+      kbd {
+        display: inline-block; min-width: 26px; padding: 3px 8px; margin: 0 1px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;
+        color: var(--text); background: var(--key-bg); border: 1px solid var(--key-border);
+        border-bottom-width: 3px; border-radius: 7px; text-align: center; line-height: 1.3;
+      }
+
+      /* sections */
+      section { padding: 56px 0; }
+      h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+      .sub { color: var(--muted); margin-bottom: 28px; max-width: 640px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+      .card {
+        background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px;
+      }
+      .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+      .card h3 .ic {
+        width: 32px; height: 32px; border-radius: 9px; display: inline-grid; place-items: center; flex: none;
+        background: rgba(168, 85, 247, 0.16); color: var(--accent); font-size: 16px;
+      }
+      .card p { color: var(--muted); font-size: 15px; }
+
+      .steps { counter-reset: step; display: grid; gap: 14px; }
+      .step { display: grid; grid-template-columns: 44px 1fr; gap: 16px; align-items: start; }
+      .step::before {
+        counter-increment: step; content: counter(step);
+        width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-weight: 800; font-size: 18px;
+      }
+      .step h3 { font-size: 17px; margin-bottom: 4px; }
+      .step p, .step li { color: var(--muted); font-size: 15px; }
+      .step ul { margin: 6px 0 0 18px; }
+      .step code, .note code, td code, .card code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;
+        background: var(--key-bg); border: 1px solid var(--card-border); padding: 2px 6px; border-radius: 6px; color: var(--text);
+        overflow-wrap: anywhere;
+      }
+      .card, .step > div, .note { min-width: 0; overflow-wrap: anywhere; }
+      .note {
+        margin-top: 22px; padding: 14px 16px; border-radius: 12px; font-size: 14px; color: var(--muted);
+        background: rgba(236, 72, 153, 0.07); border: 1px solid rgba(236, 72, 153, 0.25);
+      }
+      .note strong { color: var(--text); }
+
+      table { width: 100%; border-collapse: collapse; font-size: 15px; }
+      th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--card-border); vertical-align: top; }
+      th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+      td:first-child { white-space: nowrap; }
+      .tbl { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 16px; background: var(--card); min-width: 0; }
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .two > .tbl { min-width: 0; }
+      .two td:first-child { white-space: normal; }
+      .two td:first-child kbd { white-space: nowrap; }
+      @media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
+
+      /* reviews */
+      .rv-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 18px; margin-bottom: 22px; }
+      .rv-avg { font-size: 40px; font-weight: 800; line-height: 1; }
+      .stars { color: #fbbf24; letter-spacing: 2px; font-size: 16px; white-space: nowrap; }
+      .stars .off { color: #3a3260; }
+      .rv-count { color: var(--muted); font-size: 14px; }
+      .rv-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 26px; }
+      .rv { display: flex; flex-direction: column; gap: 8px; }
+      .rv-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+      .rv-name { font-weight: 700; overflow-wrap: anywhere; }
+      .rv-date { color: var(--muted); font-size: 12px; white-space: nowrap; }
+      .rv-text { color: var(--muted); font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
+      .rv-empty { color: var(--muted); font-size: 15px; grid-column: 1 / -1; }
+      .rv-form { display: grid; gap: 12px; max-width: 620px; }
+      .rv-form h3 { font-size: 18px; font-weight: 700; }
+      .rv-form > label, .rv-form > .rv-field { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+      .rv-form input[type="text"], .rv-form textarea {
+        width: 100%; font: inherit; font-size: 15px; color: var(--text);
+        background: var(--key-bg); border: 1px solid var(--key-border); border-radius: 10px; padding: 10px 12px;
+      }
+      .rv-form textarea { min-height: 96px; resize: vertical; }
+      .rv-form input:focus, .rv-form textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+      .rate { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 2px; }
+      .rate input { position: absolute; opacity: 0; width: 0; height: 0; }
+      .rate label { cursor: pointer; font-size: 28px; color: #3a3260; transition: color 0.1s; padding: 0 2px; }
+      .rate input:checked ~ label, .rate label:hover, .rate label:hover ~ label { color: #fbbf24; }
+      .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+      .btn-send {
+        justify-self: start; padding: 11px 22px; border: 0; border-radius: 10px; cursor: pointer;
+        font: inherit; font-weight: 700; font-size: 15px; color: #fff;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      }
+      .btn-send:disabled { opacity: 0.5; cursor: default; }
+      .rv-msg { font-size: 14px; color: var(--muted); min-height: 1.2em; }
+      .rv-msg.ok { color: #4ade80; }
+      .rv-msg.err { color: #f87171; }
+
+      /* feedback */
+      .fb-wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; align-items: start; }
+      @media (max-width: 820px) { .fb-wrap { grid-template-columns: 1fr; } }
+      .fb-side p { color: var(--muted); font-size: 15px; }
+      .fb-side ul { margin: 14px 0 0 18px; color: var(--muted); font-size: 14px; }
+      .fb-side li + li { margin-top: 6px; }
+      .fb-form { display: grid; gap: 12px; }
+      .fb-form .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      @media (max-width: 520px) { .fb-form .row2 { grid-template-columns: 1fr; } }
+      .fb-form label, .fb-form .fb-field { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+      .fb-form input[type="text"], .fb-form textarea {
+        width: 100%; font: inherit; font-size: 15px; color: var(--text);
+        background: var(--key-bg); border: 1px solid var(--key-border); border-radius: 10px; padding: 10px 12px;
+      }
+      .fb-form textarea { min-height: 140px; resize: vertical; }
+      .fb-form input:focus, .fb-form textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+      .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+      .seg input { position: absolute; opacity: 0; width: 0; height: 0; }
+      .fb-form .seg label {
+        display: inline-flex; align-items: center; gap: 6px;
+        cursor: pointer; padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--muted);
+        background: var(--key-bg); border: 1px solid var(--key-border); transition: all 0.15s ease;
+      }
+      .seg input:checked + label { color: #fff; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-color: transparent; }
+      .seg input:focus-visible + label { outline: 2px solid var(--accent); }
+
+      footer { padding: 40px 0 56px; text-align: center; color: var(--muted); font-size: 13px; border-top: 1px solid var(--card-border); }
+      footer p + p { margin-top: 6px; }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="/">← Voice Next Door</a>
+    <div class="lang" aria-label="Language">
+      <button type="button" data-set-lang="ru" class="active">RU</button>
+      <button type="button" data-set-lang="en">EN</button>
+    </div>
+
+    <header class="wrap">
+      <a class="logo-link" href="https://www.youtube.com/@Silans" target="_blank" rel="noopener" data-yt title="YouTube · @Silans">
+        <img class="logo" src="/assets/logo.png" alt="VoiceNextDoor" />
+        <span class="logo-cap"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>YouTube · @Silans</span>
+      </a>
+      <span class="eyebrow">Risk of Rain 2 · 1.4.1 · BepInEx</span>
+      <h1>RoR <span>Cheat Panel</span></h1>
+      <p class="lead">
+        <span lang-ru>Внутриигровая панель для Risk of Rain 2: предметы, godmode, noclip, телепорт, артефакты, этапы, боссы и админка игроков. Открывается по хоткею прямо в матче.</span>
+        <span lang-en>In-game panel for Risk of Rain 2: items, godmode, noclip, teleport, artifacts, stages, bosses and a player admin tab. Opens with a hotkey right in the match.</span>
+      </p>
+      <div class="cta">
+        <a class="btn-dl" href="/download" rel="nofollow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          <span><span lang-ru>Скачать</span><span lang-en>Download</span> v1.1 <small>· zip · 2.5 MB</small></span>
+        </a>
+        <p class="meta">
+          <span lang-ru>BepInEx уже внутри — ничего больше ставить не нужно.</span>
+          <span lang-en>BepInEx is bundled — nothing else to install.</span>
+          <br />SHA-256: <code>2cd53bf6…1ff71d</code>
+          <a class="hash-help" href="#sha256" title="SHA-256?"><span lang-ru>что это?</span><span lang-en>what's this?</span></a>
+        </p>
+      </div>
+      <p class="hotkey-hint">
+        <span lang-ru>В игре:</span><span lang-en>In game:</span>
+        <kbd>Ctrl</kbd> + <kbd>F10</kbd> <span lang-ru>или</span><span lang-en>or</span> <kbd>Insert</kbd>
+      </p>
+    </header>
+
+    <section class="wrap" id="features">
+      <h2><span lang-ru>Что внутри</span><span lang-en>What's inside</span></h2>
+      <p class="sub">
+        <span lang-ru>Шесть разделов. Предметы, карты, тела и скиллы читаются из каталогов игры при запуске — после патчей всё появляется само.</span>
+        <span lang-en>Six sections. Items, stages, bodies and skills are read from the game catalogs at startup, so new content shows up after patches automatically.</span>
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3><span class="ic">◆</span><span lang-ru>Лут</span><span lang-en>Loot</span></h3>
+          <p><span lang-ru>Любые предметы и снаряжение в любом количестве, дождь лута, сохраняемые пресеты сборок.</span><span lang-en>Any items and equipment in any quantity, loot rain, saveable build presets.</span></p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">☺</span><span lang-ru>Персонаж</span><span lang-en>Character</span></h3>
+          <p><span lang-ru>Смена скиллов, тела и NPC, разблокировка ачивок, статы с ползунками.</span><span lang-en>Swap skills, bodies and NPCs, unlock achievements, stat sliders.</span></p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">◎</span><span lang-ru>Мир</span><span lang-en>World</span></h3>
+          <p><span lang-ru>Артефакты и сложность на лету, переход на любой этап, команды, зарядка телепортера.</span><span lang-en>Artifacts and difficulty on the fly, jump to any stage, teams, instant teleporter charge.</span></p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">⚙</span><span lang-ru>Инструменты</span><span lang-en>Tools</span></h3>
+          <p><span lang-ru>Godmode, noclip с полётом по камере, деньги, телепорт к курсору, призыв мобов и союзников.</span><span lang-en>Godmode, camera-fly noclip, money, teleport to cursor, spawn monsters and allies.</span></p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">✶</span><span lang-ru>Хаос</span><span lang-en>Chaos</span></h3>
+          <p><span lang-ru>Рандом-режимы, камера, смена ника, вызов босса, армия клонов и дронов одной кнопкой.</span><span lang-en>Random modes, camera tricks, nickname change, summon a boss, a clone-and-drone army in one click.</span></p>
+        </div>
+        <div class="card">
+          <h3><span class="ic">♛</span><span lang-ru>Игроки (хост)</span><span lang-en>Players (host)</span></h3>
+          <p><span lang-ru>Кик, бан, мут, noclip / god / заморозка / хил для любого игрока в лобби — мод у него не нужен.</span><span lang-en>Kick, ban, mute, noclip / god / freeze / heal for anyone in the lobby — they don't need the mod.</span></p>
+        </div>
+      </div>
+      <div class="note">
+        <strong><span lang-ru>Важно:</span><span lang-en>Note:</span></strong>
+        <span lang-ru>почти всё, кроме ачивок, работает только у хоста. В коопе хостит тот, у кого стоит панель. Интерфейс на русском, английском и испанском, 10 цветовых тем.</span>
+        <span lang-en>almost everything except achievements works for the host only. In co-op, the player with the panel should host. UI in Russian, English and Spanish, 10 color themes.</span>
+      </div>
+    </section>
+
+    <section class="wrap" id="install">
+      <h2><span lang-ru>Установка</span><span lang-en>Install</span></h2>
+      <p class="sub"><span lang-ru>Две минуты, без лаунчеров.</span><span lang-en>Two minutes, no launchers.</span></p>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <h3><span lang-ru>Открой папку с игрой</span><span lang-en>Open the game folder</span></h3>
+            <p><span lang-ru>Там лежит <code>Risk of Rain 2.exe</code>. Обычно это</span><span lang-en>The one with <code>Risk of Rain 2.exe</code>. Usually</span> <code>Steam\steamapps\common\Risk of Rain 2</code>.<br />
+              <span lang-ru>В Steam: ПКМ по игре → Управление → Посмотреть локальные файлы.</span><span lang-en>In Steam: right-click the game → Manage → Browse local files.</span></p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3><span lang-ru>Распакуй архив в эту папку</span><span lang-en>Extract the archive into that folder</span></h3>
+            <p><span lang-ru>Рядом с exe должны появиться:</span><span lang-en>Next to the exe you should now have:</span></p>
+            <ul>
+              <li><code>winhttp.dll</code></li>
+              <li><code>doorstop_config.ini</code></li>
+              <li><span lang-ru>папка</span><span lang-en>the</span> <code>BepInEx</code> <span lang-en>folder</span></li>
+            </ul>
+            <p><span lang-ru>Если спросит заменить файлы — заменяй.</span><span lang-en>If asked to overwrite files, say yes.</span></p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <h3><span lang-ru>Запусти игру</span><span lang-en>Launch the game</span></h3>
+            <p><span lang-ru>Первый запуск чуть дольше обычного. В матче нажми</span><span lang-en>First launch takes a bit longer. In a match press</span> <kbd>Ctrl</kbd>+<kbd>F10</kbd> <span lang-ru>или</span><span lang-en>or</span> <kbd>Insert</kbd>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <strong><span lang-ru>Уже стоит BepInEx / r2modman?</span><span lang-en>Already have BepInEx / r2modman?</span></strong>
+        <span lang-ru>Тогда достаточно скопировать из архива папку</span><span lang-en>Then just copy the</span> <code>BepInEx\plugins\RoRCheatPanel</code> <span lang-ru>в свой</span><span lang-en>folder from the archive into your</span> <code>BepInEx\plugins</code>.
+        <span lang-ru>Хоткеи меняются в</span><span lang-en>Hotkeys can be changed in</span> <code>BepInEx\config\com.rorcheatpanel.plugin.cfg</code>.
+      </div>
+    </section>
+
+    <section class="wrap" id="hotkeys">
+      <h2><span lang-ru>Хоткеи</span><span lang-en>Hotkeys</span></h2>
+      <p class="sub"><span lang-ru>Всё переназначается в конфиге после первого запуска.</span><span lang-en>Everything is rebindable in the config after the first launch.</span></p>
+      <div class="two">
+        <div class="tbl">
+          <table>
+            <thead><tr><th><span lang-ru>Клавиши</span><span lang-en>Keys</span></th><th><span lang-ru>Действие</span><span lang-en>Action</span></th></tr></thead>
+            <tbody>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>F10</kbd> / <kbd>Insert</kbd></td><td><span lang-ru>Открыть / закрыть панель</span><span lang-en>Toggle panel</span></td></tr>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td>Noclip</td></tr>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>G</kbd></td><td>Godmode</td></tr>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td><td><span lang-ru>Скан интерактивов</span><span lang-en>Scan interactables</span></td></tr>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>B</kbd></td><td>Gummy Clone</td></tr>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>N</kbd></td><td>Drone Backup</td></tr>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>M</kbd></td><td><span lang-ru>Армия (клоны + дроны)</span><span lang-en>Army (clones + drones)</span></td></tr>
+              <tr><td><kbd>Ctrl</kbd>+<kbd>T</kbd></td><td><span lang-ru>Зарядить телепортер</span><span lang-en>Charge teleporter</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Noclip</th><th><span lang-ru>Действие</span><span lang-en>Action</span></th></tr></thead>
+            <tbody>
+              <tr><td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></td><td><span lang-ru>Полёт по камере</span><span lang-en>Fly along the camera</span></td></tr>
+              <tr><td><kbd>Space</kbd> / <kbd>E</kbd></td><td><span lang-ru>Вверх</span><span lang-en>Up</span></td></tr>
+              <tr><td><kbd>Q</kbd></td><td><span lang-ru>Вниз</span><span lang-en>Down</span></td></tr>
+              <tr><td><kbd>Shift</kbd></td><td><span lang-ru>×3 скорость</span><span lang-en>×3 speed</span></td></tr>
+              <tr><td colspan="2" style="color: var(--muted); font-size: 13px;"><span lang-ru>Скорость по умолчанию 22, слайдер во вкладке «Инструменты». Край карты в noclip не возвращает назад.</span><span lang-en>Default speed 22, slider in the Tools tab. The map boundary doesn't pull you back while in noclip.</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" id="support">
+      <div class="support">
+        <div class="support-ic">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>
+        </div>
+        <div>
+          <h2><span lang-ru>Поддержи проект</span><span lang-en>Support the project</span></h2>
+          <p>
+            <span lang-ru>Панель бесплатная и такой останется. Лучшая благодарность — подписка на канал: там ролики с панелью, анонсы обновлений и новые фичи раньше всех.</span>
+            <span lang-en>The panel is free and will stay that way. The best thank-you is a subscription: videos with the panel, update announcements and new features before anyone else.</span>
+          </p>
+        </div>
+        <div class="btns">
+          <a class="btn-yt" href="https://www.youtube.com/@Silans" target="_blank" rel="noopener" data-yt>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>
+            <span lang-ru>Подписаться</span><span lang-en>Subscribe</span>
+          </a>
+          <button class="btn-ghost" type="button" id="share-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+            <span lang-ru>Скинуть другу ссылку</span><span lang-en>Share with a friend</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" id="faq">
+      <h2>FAQ</h2>
+      <div class="grid">
+        <div class="card">
+          <h3><span lang-ru>Друг без мода видит мои читы?</span><span lang-en>Does a friend without the mod see my cheats?</span></h3>
+          <p><span lang-ru>Да, если ты хост. Предметы, телепорт, боссы, noclip/god для других игроков — всё синхронизируется через сервер. Только ачивки «выбранным» требуют панель у них.</span><span lang-en>Yes, if you host. Items, teleport, bosses, noclip/god for other players — all of it syncs through the server. Only "achievements for selected players" need the panel on their side.</span></p>
+        </div>
+        <div class="card">
+          <h3><span lang-ru>Статы не меняются</span><span lang-en>Stats don't change</span></h3>
+          <p><span lang-ru>Во вкладке «Инструменты» сначала нажми «Прочитать текущие», потом двигай ползунки и «Apply changes».</span><span lang-en>In the Tools tab press "Read current" first, then move the sliders and hit "Apply changes".</span></p>
+        </div>
+        <div class="card">
+          <h3><span lang-ru>Где баны и пресеты?</span><span lang-en>Where are bans and presets?</span></h3>
+          <p><span lang-ru>Баны — <code>BepInEx\plugins\RoRCheatPanel\bans.txt</code>, пресеты — папка <code>Presets</code> рядом. Удалил файл — снял бан.</span><span lang-en>Bans — <code>BepInEx\plugins\RoRCheatPanel\bans.txt</code>, presets — the <code>Presets</code> folder next to it. Delete the file to lift a ban.</span></p>
+        </div>
+        <div class="card">
+          <h3><span lang-ru>Как удалить?</span><span lang-en>How to uninstall?</span></h3>
+          <p><span lang-ru>Удали <code>winhttp.dll</code>, <code>doorstop_config.ini</code> и папку <code>BepInEx</code> из папки игры. Или только <code>BepInEx\plugins\RoRCheatPanel</code>, если хочешь оставить BepInEx.</span><span lang-en>Delete <code>winhttp.dll</code>, <code>doorstop_config.ini</code> and the <code>BepInEx</code> folder from the game directory. Or just <code>BepInEx\plugins\RoRCheatPanel</code> to keep BepInEx.</span></p>
+        </div>
+        <div class="card wide" id="sha256">
+          <h3><span lang-ru>Что за SHA-256 под кнопкой скачивания?</span><span lang-en>What's the SHA-256 under the download button?</span></h3>
+          <p>
+            <span lang-ru>Это «отпечаток» архива. Если кто-то перезальёт файл с добавленным вирусом, отпечаток изменится, даже если размер и название те же. Сверив его, ты точно знаешь, что качаешь оригинал. Проверить просто: скачай архив, открой PowerShell в папке с ним и выполни:</span>
+            <span lang-en>It's the archive's fingerprint. If someone re-uploads the file with malware added, the fingerprint changes even if the size and name look the same. Compare it and you know you've got the original. To check: download the archive, open PowerShell in that folder and run:</span>
+          </p>
+          <pre>Get-FileHash .\RoRCheatPanel-1.1.zip</pre>
+          <p style="margin-top: 10px;">
+            <span lang-ru>В строке <code>Hash</code> должно быть:</span>
+            <span lang-en>The <code>Hash</code> line should read:</span>
+          </p>
+          <pre class="full-hash">2CD53BF6D437661F507F8EAE07556BE4FD019BFF99C85C6AED2C4CF99B1FF71D</pre>
+          <p style="margin-top: 10px;">
+            <span lang-ru>Совпало — файл оригинальный. Не совпало — не запускай и скачай заново с этой страницы. На Linux/Mac та же проверка: <code>sha256sum RoRCheatPanel-1.1.zip</code>.</span>
+            <span lang-en>Matches — the file is genuine. Doesn't match — don't run it, re-download from this page. On Linux/Mac: <code>sha256sum RoRCheatPanel-1.1.zip</code>.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" id="reviews">
+      <h2><span lang-ru>Отзывы</span><span lang-en>Reviews</span></h2>
+      <div class="rv-head">
+        <div class="rv-avg" id="rv-avg">—</div>
+        <div class="stars" id="rv-avg-stars" aria-hidden="true"></div>
+        <div class="rv-count" id="rv-count"><span lang-ru>пока нет отзывов</span><span lang-en>no reviews yet</span></div>
+      </div>
+      <div class="rv-list" id="rv-list">
+        <div class="rv-empty"><span lang-ru>Загрузка…</span><span lang-en>Loading…</span></div>
+      </div>
+
+      <form class="rv-form card" id="rv-form" autocomplete="off" novalidate>
+        <h3><span lang-ru>Оставить отзыв</span><span lang-en>Leave a review</span></h3>
+        <label>
+          <span><span lang-ru>Ник</span><span lang-en>Nickname</span></span>
+          <input type="text" name="name" maxlength="32" required />
+        </label>
+        <div class="rv-field">
+          <span><span lang-ru>Оценка</span><span lang-en>Rating</span></span>
+          <div class="rate" role="radiogroup">
+            <input type="radio" id="r5" name="rating" value="5" /><label for="r5" title="5">★</label>
+            <input type="radio" id="r4" name="rating" value="4" /><label for="r4" title="4">★</label>
+            <input type="radio" id="r3" name="rating" value="3" /><label for="r3" title="3">★</label>
+            <input type="radio" id="r2" name="rating" value="2" /><label for="r2" title="2">★</label>
+            <input type="radio" id="r1" name="rating" value="1" /><label for="r1" title="1">★</label>
+          </div>
+        </div>
+        <label>
+          <span><span lang-ru>Отзыв</span><span lang-en>Review</span></span>
+          <textarea name="text" maxlength="600" required></textarea>
+        </label>
+        <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" /></label>
+        <button class="btn-send" type="submit"><span lang-ru>Отправить</span><span lang-en>Submit</span></button>
+        <div class="rv-msg" id="rv-msg"></div>
+      </form>
+    </section>
+
+    <section class="wrap" id="feedback">
+      <h2><span lang-ru>Нашёл баг? Напиши</span><span lang-en>Found a bug? Tell me</span></h2>
+      <div class="fb-wrap">
+        <div class="fb-side">
+          <p>
+            <span lang-ru>Сообщение уходит напрямую автору. Чем точнее опишешь — тем быстрее починю.</span>
+            <span lang-en>Goes straight to the author. The more precise the description, the faster the fix.</span>
+          </p>
+          <ul>
+            <li><span lang-ru>Что делал и что ожидал увидеть</span><span lang-en>What you did and what you expected</span></li>
+            <li><span lang-ru>Что произошло на самом деле</span><span lang-en>What actually happened</span></li>
+            <li><span lang-ru>Ты хост или гость, сколько игроков</span><span lang-en>Host or client, how many players</span></li>
+            <li><span lang-ru>Другие моды, если стоят</span><span lang-en>Other mods, if any</span></li>
+            <li><span lang-ru>Файл <code>BepInEx\LogOutput.log</code> — если есть, вставь ошибку из него</span><span lang-en>The <code>BepInEx\LogOutput.log</code> file — paste the error from it if there is one</span></li>
+          </ul>
+        </div>
+        <form class="fb-form card" id="fb-form" autocomplete="off" novalidate>
+          <div class="fb-field">
+            <span><span lang-ru>Тип</span><span lang-en>Type</span></span>
+            <div class="seg" role="radiogroup">
+              <input type="radio" id="fb-bug" name="type" value="bug" checked /><label for="fb-bug">🐞 <span lang-ru>Баг</span><span lang-en>Bug</span></label>
+              <input type="radio" id="fb-idea" name="type" value="idea" /><label for="fb-idea">💡 <span lang-ru>Идея</span><span lang-en>Idea</span></label>
+              <input type="radio" id="fb-other" name="type" value="other" /><label for="fb-other">💬 <span lang-ru>Другое</span><span lang-en>Other</span></label>
+            </div>
+          </div>
+          <div class="row2">
+            <label>
+              <span><span lang-ru>Ник</span><span lang-en>Nickname</span> <span style="opacity:.6">(<span lang-ru>необязательно</span><span lang-en>optional</span>)</span></span>
+              <input type="text" name="name" maxlength="32" />
+            </label>
+            <label>
+              <span><span lang-ru>Как с тобой связаться</span><span lang-en>How to reach you</span> <span style="opacity:.6">(<span lang-ru>необязательно</span><span lang-en>optional</span>)</span></span>
+              <input type="text" name="contact" maxlength="80" placeholder="Telegram / Discord / email" />
+            </label>
+          </div>
+          <label>
+            <span><span lang-ru>Версия панели</span><span lang-en>Panel version</span></span>
+            <input type="text" name="version" maxlength="20" value="1.1" />
+          </label>
+          <label>
+            <span><span lang-ru>Описание</span><span lang-en>Description</span></span>
+            <textarea name="text" maxlength="2000" required></textarea>
+          </label>
+          <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" /></label>
+          <button class="btn-send" type="submit"><span lang-ru>Отправить</span><span lang-en>Send</span></button>
+          <div class="rv-msg" id="fb-msg"></div>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <p>RoR Cheat Panel 1.1 · <span lang-ru>для</span><span lang-en>for</span> Risk of Rain 2 1.4.1 (Alloyed Collective) · BepInEx 5.4.19 · <a href="#feedback"><span lang-ru>Сообщить о баге</span><span lang-en>Report a bug</span></a></p>
+        <p><span lang-ru>Сделано VoiceNextDoor. Неофициальный мод, не связан с Hopoo Games / Gearbox. Используй в своих лобби и с согласия друзей.</span><span lang-en>Made by VoiceNextDoor. Unofficial mod, not affiliated with Hopoo Games / Gearbox. Use in your own lobbies with your friends' consent.</span></p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var buttons = document.querySelectorAll('[data-set-lang]');
+        function setLang(l) {
+          root.setAttribute('data-lang', l);
+          root.setAttribute('lang', l);
+          buttons.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-set-lang') === l); });
+          try { localStorage.setItem('rcp-lang', l); } catch (e) {}
+        }
+        buttons.forEach(function (b) { b.addEventListener('click', function () { setLang(b.getAttribute('data-set-lang')); }); });
+        var saved = null;
+        try { saved = localStorage.getItem('rcp-lang'); } catch (e) {}
+        if (saved === 'en' || saved === 'ru') { setLang(saved); }
+        else if (!/^ru/i.test(navigator.language || '')) { setLang('en'); }
+
+        /* ---- page view beacon ---- */
+        try {
+          var payload = JSON.stringify({ e: 'view', r: document.referrer, l: root.getAttribute('data-lang'), p: location.pathname });
+          if (navigator.sendBeacon) navigator.sendBeacon('/api/track', new Blob([payload], { type: 'application/json' }));
+          else fetch('/api/track', { method: 'POST', body: payload, headers: { 'content-type': 'application/json' }, keepalive: true });
+        } catch (e) {}
+
+        /* ---- youtube clicks + share ---- */
+        function beacon(obj) {
+          try {
+            var p = JSON.stringify(obj);
+            if (navigator.sendBeacon) navigator.sendBeacon('/api/track', new Blob([p], { type: 'application/json' }));
+            else fetch('/api/track', { method: 'POST', body: p, headers: { 'content-type': 'application/json' }, keepalive: true });
+          } catch (e) {}
+        }
+        document.querySelectorAll('[data-yt]').forEach(function (a) { a.addEventListener('click', function () { beacon({ e: 'yt' }); }); });
+        var shareBtn = document.getElementById('share-btn');
+        if (shareBtn) shareBtn.addEventListener('click', function () {
+          var url = location.origin + '/ror/';
+          var label = shareBtn.querySelector('[lang-' + root.getAttribute('data-lang') + ']');
+          var orig = label.textContent;
+          function done(txt) { shareBtn.classList.add('done'); label.textContent = txt; setTimeout(function () { shareBtn.classList.remove('done'); label.textContent = orig; }, 2000); beacon({ e: 'share' }); }
+          if (navigator.share) {
+            navigator.share({ title: 'RoR Cheat Panel', url: url }).then(function () { done(root.getAttribute('data-lang') === 'en' ? 'Shared!' : 'Отправлено!'); }).catch(function () {});
+          } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(function () { done(root.getAttribute('data-lang') === 'en' ? 'Link copied!' : 'Ссылка скопирована!'); });
+          } else { prompt('URL', url); }
+        });
+
+        /* ---- reviews ---- */
+        var T = {
+          ru: { none: 'пока нет отзывов', one: 'отзыв', few: 'отзыва', many: 'отзывов', empty: 'Отзывов пока нет — будь первым.', sending: 'Отправляю…', ok: 'Спасибо! Отзыв опубликован.', rate: 'Можно оставлять один отзыв раз в 10 минут.', name: 'Напиши ник.', text: 'Отзыв слишком короткий.', rating: 'Поставь оценку.', fail: 'Не получилось отправить, попробуй позже.' },
+          en: { none: 'no reviews yet', one: 'review', few: 'reviews', many: 'reviews', empty: 'No reviews yet — be the first.', sending: 'Sending…', ok: 'Thanks! Your review is live.', rate: 'One review per 10 minutes, please.', name: 'Enter a nickname.', text: 'Review is too short.', rating: 'Pick a rating.', fail: 'Could not send, try again later.' }
+        };
+        function t(k) { return T[root.getAttribute('data-lang')] [k] || T.ru[k]; }
+        function plural(n, l) { if (l === 'en') return n === 1 ? T.en.one : T.en.few; var m10 = n % 10, m100 = n % 100; if (m10 === 1 && m100 !== 11) return T.ru.one; if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return T.ru.few; return T.ru.many; }
+        function stars(n) { var s = document.createElement('span'); s.className = 'stars'; for (var i = 1; i <= 5; i++) { var st = document.createElement('span'); st.textContent = '★'; if (i > Math.round(n)) st.className = 'off'; s.appendChild(st); } return s; }
+        function fmtDate(iso) { try { return new Date(iso).toLocaleDateString(root.getAttribute('data-lang') === 'en' ? 'en-US' : 'ru-RU', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } }
+
+        var list = document.getElementById('rv-list');
+        var avgEl = document.getElementById('rv-avg'), avgStars = document.getElementById('rv-avg-stars'), countEl = document.getElementById('rv-count');
+        var state = { reviews: [], average: 0, count: 0 };
+
+        function render() {
+          var l = root.getAttribute('data-lang');
+          list.textContent = '';
+          if (!state.reviews.length) {
+            var e = document.createElement('div'); e.className = 'rv-empty'; e.textContent = t('empty'); list.appendChild(e);
+          }
+          state.reviews.forEach(function (r) {
+            var c = document.createElement('div'); c.className = 'card rv';
+            var top = document.createElement('div'); top.className = 'rv-top';
+            var nm = document.createElement('div'); nm.className = 'rv-name'; nm.textContent = r.name;
+            var dt = document.createElement('div'); dt.className = 'rv-date'; dt.textContent = fmtDate(r.createdAt);
+            top.appendChild(nm); top.appendChild(dt);
+            var tx = document.createElement('div'); tx.className = 'rv-text'; tx.textContent = r.text;
+            c.appendChild(top); c.appendChild(stars(r.rating)); c.appendChild(tx);
+            list.appendChild(c);
+          });
+          if (state.count) {
+            avgEl.textContent = state.average.toFixed(1);
+            avgStars.textContent = ''; avgStars.appendChild(stars(state.average));
+            countEl.textContent = state.count + ' ' + plural(state.count, l);
+          } else {
+            avgEl.textContent = '—'; avgStars.textContent = ''; countEl.textContent = t('none');
+          }
+        }
+        buttons.forEach(function (b) { b.addEventListener('click', render); });
+
+        fetch('/api/reviews').then(function (r) { return r.json(); }).then(function (d) {
+          state = { reviews: d.reviews || [], average: d.average || 0, count: d.count || 0 }; render();
+        }).catch(function () { state = { reviews: [], average: 0, count: 0 }; render(); });
+
+        var form = document.getElementById('rv-form'), msg = document.getElementById('rv-msg');
+        form.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          var fd = new FormData(form);
+          var body = { name: (fd.get('name') || '').trim(), text: (fd.get('text') || '').trim(), rating: Number(fd.get('rating')), website: fd.get('website') || '', lang: root.getAttribute('data-lang') };
+          msg.className = 'rv-msg';
+          if (!body.name) { msg.className += ' err'; msg.textContent = t('name'); return; }
+          if (!body.rating) { msg.className += ' err'; msg.textContent = t('rating'); return; }
+          if (body.text.length < 5) { msg.className += ' err'; msg.textContent = t('text'); return; }
+          var btn = form.querySelector('button'); btn.disabled = true; msg.textContent = t('sending');
+          fetch('/api/reviews', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+            .then(function (r) { return r.json().then(function (d) { return { s: r.status, d: d }; }); })
+            .then(function (x) {
+              if (x.s === 201 && x.d.review) {
+                state.reviews.unshift(x.d.review);
+                state.count += 1; state.average = state.reviews.reduce(function (a, r) { return a + r.rating; }, 0) / state.reviews.length;
+                render(); form.reset(); msg.className = 'rv-msg ok'; msg.textContent = t('ok');
+              } else if (x.s === 429) { msg.className = 'rv-msg err'; msg.textContent = t('rate'); }
+              else if (x.d && (x.d.error === 'name' || x.d.error === 'text' || x.d.error === 'rating')) { msg.className = 'rv-msg err'; msg.textContent = t(x.d.error); }
+              else { msg.className = 'rv-msg err'; msg.textContent = t('fail'); }
+            })
+            .catch(function () { msg.className = 'rv-msg err'; msg.textContent = t('fail'); })
+            .then(function () { btn.disabled = false; });
+        });
+
+        /* ---- feedback ---- */
+        var FT = {
+          ru: { sending: 'Отправляю…', ok: 'Спасибо! Сообщение ушло автору.', rate: 'Подожди пару минут перед следующим сообщением.', text: 'Опиши подробнее — хотя бы пару предложений.', fail: 'Не получилось отправить, попробуй позже.' },
+          en: { sending: 'Sending…', ok: 'Thanks! The message has reached the author.', rate: 'Wait a couple of minutes before sending another one.', text: 'Add a bit more detail — at least a sentence or two.', fail: 'Could not send, try again later.' }
+        };
+        function ft(k) { return FT[root.getAttribute('data-lang')][k] || FT.ru[k]; }
+        var fbForm = document.getElementById('fb-form'), fbMsg = document.getElementById('fb-msg');
+        fbForm.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          var fd = new FormData(fbForm);
+          var body = {
+            type: fd.get('type') || 'other',
+            name: (fd.get('name') || '').trim(),
+            contact: (fd.get('contact') || '').trim(),
+            version: (fd.get('version') || '').trim(),
+            text: (fd.get('text') || '').trim(),
+            website: fd.get('website') || '',
+            lang: root.getAttribute('data-lang')
+          };
+          fbMsg.className = 'rv-msg';
+          if (body.text.length < 10) { fbMsg.className += ' err'; fbMsg.textContent = ft('text'); return; }
+          var btn = fbForm.querySelector('button'); btn.disabled = true; fbMsg.textContent = ft('sending');
+          fetch('/api/feedback', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+            .then(function (r) { return r.json().then(function (d) { return { s: r.status, d: d }; }); })
+            .then(function (x) {
+              if (x.s === 201) { fbForm.reset(); fbMsg.className = 'rv-msg ok'; fbMsg.textContent = ft('ok'); beacon({ e: 'feedback' }); }
+              else if (x.s === 429) { fbMsg.className = 'rv-msg err'; fbMsg.textContent = ft('rate'); }
+              else if (x.d && x.d.error === 'text') { fbMsg.className = 'rv-msg err'; fbMsg.textContent = ft('text'); }
+              else { fbMsg.className = 'rv-msg err'; fbMsg.textContent = ft('fail'); }
+            })
+            .catch(function () { fbMsg.className = 'rv-msg err'; fbMsg.textContent = ft('fail'); })
+            .then(function () { btn.disabled = false; });
+        });
+      })();
+    </script>
+  </body>
+</html>

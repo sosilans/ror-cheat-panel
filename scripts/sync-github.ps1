@@ -12,10 +12,14 @@ if (-not $origin) {
     exit 0
 }
 
+function Push-Origin {
+    git -c credential.helper= -c "credential.helper=!gh auth git-credential" push origin HEAD
+}
+
 git add -A
 git diff --cached --quiet
 if ($LASTEXITCODE -eq 0) {
-    git push origin HEAD
+    Push-Origin
     exit 0
 }
 
@@ -38,5 +42,5 @@ if ($LASTEXITCODE -ne 0) {
     exit 0
 }
 
-git push origin HEAD
+Push-Origin
 exit 0

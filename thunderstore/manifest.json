@@ -1,0 +1,9 @@
+{
+  "name": "RoRCheatPanel",
+  "version_number": "1.1.0",
+  "website_url": "https://ror-cheat-panel.netlify.app",
+  "description": "Host cheat panel for Risk of Rain 2. The build stays in sync with https://ror-cheat-panel.netlify.app",
+  "dependencies": [
+    "bbepis-BepInExPack-5.4.2122"
+  ]
+}

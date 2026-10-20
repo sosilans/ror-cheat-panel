@@ -1,0 +1,15 @@
+bin/
+obj/
+_cmp/
+youtube-srt/
+RoRCheatPanel-3.6.5-install/
+RoRCheatPanel-3.6.5-install.zip
+thunderstore/_stage/
+*.log
+.env
+*.user
+*.suo
+.vs/
+injector.obj
+ChatGPT Image*.png
+debug-*.log

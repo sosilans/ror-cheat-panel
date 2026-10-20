@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>disable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <RootNamespace>RoRCheatPanel.Channel.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\channel\CameraFraming.cs" Link="CameraFraming.cs" />
+    <Compile Include="..\channel\MenuFilter.cs" Link="MenuFilter.cs" />
+    <Compile Include="..\channel\LobbyRules.cs" Link="LobbyRules.cs" />
+    <Compile Include="..\channel\TeamWords.cs" Link="TeamWords.cs" />
+  </ItemGroup>
+</Project>

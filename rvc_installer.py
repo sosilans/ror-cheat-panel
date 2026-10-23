@@ -205,9 +205,7 @@ def find_python() -> tuple[str, tuple[int, int, int]] | None:
     if not matches:
         return None
     # Prefer 3.12: the official requirements files are written for it.
-    matches.sort(key=lambda item: item[0])
-    py312 = [item for item in matches if item[0][:2] == (3, 12)]
-    version, exe = (py312 or matches)[-1]
+image.png
     return exe, version
 
 

@@ -1,0 +1,10 @@
+Если программа RVC-Installer.exe не запустилась или установка оборвалась, откройте эти страницы вручную:
+
+Официальный RVC (Retrieval-based Voice Conversion WebUI)
+https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI
+
+Applio — более простой вариант того же RVC для Windows, Mac и Linux
+https://github.com/IAHispano/Applio
+
+Seed-VC — преобразование голоса без обучения своей модели
+https://github.com/Plachtaa/seed-vc

@@ -213,7 +213,7 @@ def find_python() -> tuple[str, tuple[int, int, int]] | None:
 
 def install_python(status, log) -> tuple[str, tuple[int, int, int]]:
     status("Скачиваю Python 3.12")
-    log("Python 3.10 или новее не найден. Скачиваю официальный установщик Python 3.12.")
+    log("Скачиваю официальный установщик Python 3.12.")
     installer = os.path.join(os.environ.get("TEMP", r"C:\Windows\Temp"), "python-3.12.10-amd64.exe")
     download(
         PYTHON_INSTALLER,
@@ -242,27 +242,30 @@ def install_python(status, log) -> tuple[str, tuple[int, int, int]]:
             f"{result.returncode}. Установите Python 3.12 с python.org и запустите программу снова."
         )
     found = find_python()
-    if found is None:
+    if found is None or found[1][:2] != (3, 12):
         raise InstallError(
-            "Python установился, но программа его не видит. Закройте установщик и запустите его ещё раз."
+            "Python 3.12 установился, но программа его не видит. Закройте установщик и запустите его ещё раз."
         )
     log(f"Python установлен: {found[1][0]}.{found[1][1]}.{found[1][2]}")
     return found
 
 
 def ensure_python(status, log) -> tuple[str, tuple[int, int, int]]:
-    status("Проверяю Python")
-    log("Проверяю, установлен ли Python 3.10 или новее.")
+    status("Проверяю Python 3.12")
+    log("Проверяю, установлен ли Python 3.12.")
     found = find_python()
-    if found is not None:
+    if found is not None and found[1][:2] == (3, 12):
         exe, version = found
-        log(f"Python уже установлен: {version[0]}.{version[1]}.{version[2]} ({exe})")
-        if version[:2] != (3, 12):
-            log(
-                "Официальные файлы зависимостей RVC рассчитаны на Python 3.12. "
-                "Будет использован уже установленный Python."
-            )
+        log(f"Python 3.12 уже установлен: {version[0]}.{version[1]}.{version[2]} ({exe})")
         return found
+    if found is not None:
+        version = found[1]
+        log(
+            f"Найден Python {version[0]}.{version[1]}, но официальному RVC нужен Python 3.12. "
+            "Скачиваю Python 3.12."
+        )
+    else:
+        log("Python 3.12 не найден. Скачиваю его.")
     return install_python(status, log)
 
 
